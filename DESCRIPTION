@@ -1,0 +1,20 @@
+Package: surv.dongle
+Type: Package
+Title: A dongle for extension of survival plotting
+Version: 0.0.9000
+Author: Trinh Dong <trinhdhk@outlook.com.vn>
+Maintainer: TTrinh Dong <trinhdhk@outlook.com.vn>
+Description: Part of my dongles. A small handful of functions to plot Aalen-Johansen estimates in a survival plot.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends:
+  R (>= 4.1.0),
+  ggsurvfit
+Imports:
+  ggplot2,
+  survminer,
+  formula.tools,
+  purrr,
+  dplyr
+RoxygenNote: 7.3.2
