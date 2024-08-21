@@ -86,9 +86,14 @@ gg_ajsurvplot2 <- function(formula, data, weights, subset, na.action, main.event
   dt <- do.call(tidy_competingevent, gargs)
 
   # if any variable in data is a factor, dt shoule be so
-  for (v in formula.tools::rhs.vars(formula)) {
-    if (is.factor(data[[v]])) dt[[v]] <- factor(dt[[v]], levels=levels(data[[v]]))
-  }
+  strata_levels_order <-
+    lapply(formula.tools::rhs.vars(formula),
+           function(v){
+             if (is.factor(data[[v]])) return(as.numeric(factor(dt[[v]], levels=levels(data[[v]]))))
+             as.numeric(factor(dt[[v]]))
+           }) |> do.call(order, args=_)
+
+  dt$strata <- factor(dt$strata, levels = unique(dt$strata)[strata_levels_order])
 
   facet <- facet.vars <- NULL
   if (!is.null(facet.by)){
