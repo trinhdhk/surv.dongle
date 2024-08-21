@@ -85,15 +85,18 @@ gg_ajsurvplot2 <- function(formula, data, weights, subset, na.action, main.event
 
   dt <- do.call(tidy_competingevent, gargs)
 
-  # if any variable in data is a factor, dt shoule be so
+  # if any variable in data is a factor, dt should be so
+  for (v in formula.tools::rhs.vars(formula)){
+    if (is.factor(data[[v]])) dt[[v]] <- factor(dt[[v]], levels=levels(data[[v]]))
+  }
+
   strata_levels_order <-
-    lapply(formula.tools::rhs.vars(formula),
+    lapply(formula.tools::rhs.vars(formula)[!formula.tools::rhs.vars(formula) %in%
+                                              formula.tools::get.vars(facet.by)],
            function(v){
              if (is.factor(data[[v]])) return(as.numeric(factor(dt[[v]], levels=levels(data[[v]]))))
              as.numeric(factor(dt[[v]]))
            }) |> do.call(order, args=_)
-
-  dt$strata <- factor(dt$strata, levels = unique(dt$strata)[strata_levels_order])
 
   facet <- facet.vars <- NULL
   if (!is.null(facet.by)){
@@ -108,6 +111,8 @@ gg_ajsurvplot2 <- function(formula, data, weights, subset, na.action, main.event
 
   if (all(dt$strata == '')) plt <- ggplot(dt,aes(x=time, y=estimate, ymin=conf.low, ymax=conf.high, group=Event))
   else if (!isFALSE(monochrome)) {
+
+    dt$strata <- factor(dt$strata, levels = unique(dt$strata)[strata_levels_order])
     plt <- ggplot(dt,aes(x=time, y=estimate, ymin=conf.low, ymax=conf.high, linetype=strata, color=Event))
     if (ci) plt <- plt +
       ggsurvfit::stat_stepribbon(alpha=.5, linewidth=.2, fill='transparent')
@@ -117,6 +122,8 @@ gg_ajsurvplot2 <- function(formula, data, weights, subset, na.action, main.event
   }
 
   else {
+
+    dt$strata <- factor(dt$strata, levels = unique(dt$strata)[strata_levels_order])
     plt <- ggplot(dt,aes(x=time, y=estimate, ymin=conf.low, ymax=conf.high, linetype=Event, color=strata, fill=strata))
     if (ci) plt <- plt +  ggsurvfit::stat_stepribbon(alpha=.3, color='transparent')
     plt <- plt +  geom_step(linewidth=1) +
