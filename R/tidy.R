@@ -33,7 +33,12 @@ tidy_ajcomprsk <- function(formula, data, weights, subset, na.action, main.event
   tidy1 <- tidy_survfit2(sf1, type=tidy_types[['main']]) |> mutate(Event = main.event)
   tidy2 <- tidy_survfit2(sf2, type=tidy_types[['competing']]) |> mutate(Event = competing.event)
 
-  rbind(tidy1, tidy2) |> tibble::as_tibble()
+  tidydt <- rbind(tidy1, tidy2) |> tibble::as_tibble()
+  # if any variable in data is a factor, dt should be so
+  for (v in formula.tools::rhs.vars(formula)){
+    if (is.factor(data[[v]])) tidydt[[v]] <- factor(tidydt[[v]], levels=levels(data[[v]]))
+  }
+  tidydt
 }
 
 
