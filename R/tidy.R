@@ -36,7 +36,10 @@ tidy_ajcomprsk <- function(formula, data, weights, subset, na.action, main.event
   tidydt <- rbind(tidy1, tidy2) |> tibble::as_tibble()
   # if any variable in data is a factor, dt should be so
   for (v in formula.tools::rhs.vars(formula)){
-    if (is.factor(data[[v]])) tidydt[[v]] <- factor(tidydt[[v]], levels=levels(data[[v]]))
+    if (is.factor(data[[v]])) {
+      data_levels <- levels(data[[v]]) |> gsub('\\s+$', '', x=_) # remove all trailing space for levels. strange thing with survfit
+      tidydt[[v]] <- tidydt[[v]] |>  gsub('\\s+$', '', x=_)  |> factor(levels=data_levels)
+    }
   }
   tidydt
 }
