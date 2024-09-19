@@ -15,8 +15,7 @@ gg_ajsurvplot <- function(formula, data, weights, subset, na.action, event, coun
   fgargs$etype <- event
   fgargs$event <- NULL
   fgargs$backend <- NULL
-  fgargs$data <- data
-  fg <- do.call(survival::finegray, fgargs)
+  fg <- do.call(survival::finegray, fgargs, envir=parent.frame())
   backend <- match.arg(backend)
 
   fml <- force(update(formula, Surv(fgstart,fgstop,fgstatus)~.))
