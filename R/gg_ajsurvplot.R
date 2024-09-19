@@ -14,6 +14,8 @@ gg_ajsurvplot <- function(formula, data, weights, subset, na.action, event, coun
   fgargs <- as.list(fgargs[setdiff(names(fgargs), names(dot))])
   fgargs$etype <- event
   fgargs$event <- NULL
+  fargs$backend <- NULL
+  fargs$data <- data
   fg <- do.call(survival::finegray, fgargs)
   backend <- match.arg(backend)
 
