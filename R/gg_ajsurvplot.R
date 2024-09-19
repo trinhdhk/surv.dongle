@@ -84,7 +84,7 @@ gg_ajsurvplot2 <- function(formula, data, weights, subset, na.action, main.event
   gargs$tidy_type <- c(main='risk', competing='survival')
   if (style == 'overlaid') gargs$tidy_type[['competing']] <- 'risk'
 
-  dt <- do.call(tidy_ajcomprsk, gargs)
+  dt <- do.call(tidy_ajcomprsk, gargs, envir=parent.frame())
 
   # if any variable in data is a factor, dt should be so
   for (v in formula.tools::rhs.vars(formula)){

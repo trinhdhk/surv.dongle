@@ -22,8 +22,8 @@ tidy_ajcomprsk <- function(formula, data, weights, subset, na.action, main.event
     new.arg
   })
   if(is.null(names(tidy_types))) names(tidy_types) <- c('main', 'competing')
-  fg1 <- do.call(survival::finegray, fgargs.each[[1]])
-  fg2 <- do.call(survival::finegray, fgargs.each[[2]])
+  fg1 <- do.call(survival::finegray, fgargs.each[[1]], envir=parent.frame())
+  fg2 <- do.call(survival::finegray, fgargs.each[[2]], envir=parent.frame())
   # browser()
   fml <- force(update(formula, survival::Surv(fgstart,fgstop,fgstatus)~.))
 
