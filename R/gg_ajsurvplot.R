@@ -6,9 +6,9 @@
 #' @param event event of interest, passed to finegray as etype.
 #' @param weights,subset,na.action, count,id,timefix parameter passed to finegray model. See \code{\link[survival:finegray]{finegray}},
 #' @param backend [\code{ggsurvfit}] either 'survminer' or 'ggsurvfit'
-#' @param ... optional parameters passed to \code{ggsurvplot} or ].
+#' @param ... optional parameters passed to \code{ggsurvplot} or \code{ggsurvfit}.
 #' @export
-gg_ajsurvplot <- function(formula, data, weights, subset, na.action, etype, count, id, timefix, backend = c('ggsurvfit', 'survminer'), ...){
+gg_ajsurvplot <- function(formula, data, weights, subset, na.action, event, count, id, timefix, backend = c('ggsurvfit', 'survminer'), ...){
   dot <- list(...)
   fgargs <- match.call()[-1]
   fgargs <- as.list(fgargs[setdiff(names(fgargs), names(dot))])
